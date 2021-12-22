@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TodoController extends Controller
 {
     public function index(){
-        return view('todo_CRUD.list');
+        $list = DB::select('SELECT* FROM todo');
+        
+        return view('todo_CRUD.list', [
+            'list' => $list
+        ]);
     }
 
     public function add(){
