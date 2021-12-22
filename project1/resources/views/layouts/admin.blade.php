@@ -8,15 +8,15 @@
 </head>
 <body>
     <header>
-        <h1>Header</h1>
+        <h1>@yield('header')</h1>
     </header>
-        <hr>
+        
     <section>
         @yield('content')
     </section>
         <hr>
     <footer>
-        <h1>Footer</h1>
+
     </footer>
 </body>
 </html>
