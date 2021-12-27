@@ -9,7 +9,7 @@ class TodoController extends Controller
 {
     public function index(){
         $list = DB::select('SELECT* FROM todo');
-        
+
         return view('todo_CRUD.list', [
             'list' => $list
         ]);
@@ -19,8 +19,19 @@ class TodoController extends Controller
         return view('todo_CRUD.add');
     }
 
-    public function addAction(){
+    public function addAction(Request $request){
+        if($request->filled('title')) {
 
+
+            DB::insert('INSERT INTO todo (title, date) VALUES (:title, :date)', [
+                'title' => $request->input('title'),
+                'date' => NOW()
+            ]);
+
+            return redirect()->route('todo.list');
+        } else {
+            return redirect()->route('todo.add')->with('warning', 'Empty field');
+        }
     }
 
     public function edit(){

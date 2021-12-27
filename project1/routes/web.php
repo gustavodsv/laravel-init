@@ -11,6 +11,8 @@ Route::get('/', function(){
     return view('/welcome');
 });
 
+Route::redirect('/', '/todo');
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::view('/test', 'test');
