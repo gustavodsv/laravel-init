@@ -18,13 +18,16 @@ Route::view('/test', 'test');
 
 Route::prefix('/todo')->group(function() {
 
-    Route::get('/', [TodoController::class, 'index']);
-    Route::get('/add', [TodoController::class, 'add']);
+    Route::get('/', [TodoController::class, 'index'])->name('todo.list');
+
+    Route::get('/add', [TodoController::class, 'add'])->name('todo.add');
     Route::post('/add', [TodoController::class, 'addAction']);
-    Route::get('/edit/{id}', [TodoController::class, 'edit']);
+
+    Route::get('/edit/{id}', [TodoController::class, 'edit'])->name('todo.edit');
     Route::post('/edit/{id}', [TodoController::class, 'editAction']);
-    Route::get('/delete/{id}', [TodoController::class, 'editAction']);
-    Route::get('/mark/{id}', [TodoController::class, 'status']);
+
+    Route::get('/delete/{id}', [TodoController::class, 'delete'])->name('todo.delete');
+    Route::get('/status/{id}', [TodoController::class, 'status'])->name('todo.status');
 
 });
 
