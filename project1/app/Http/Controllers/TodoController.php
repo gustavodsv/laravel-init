@@ -79,8 +79,12 @@ class TodoController extends Controller
         return redirect()->route('todo.list');
     }
 
-    public function status(){
-        
+    public function status($id){
+        DB::update('UPDATE todo SET status = 1 - status WHERE id = :id', [
+            'id' => $id
+        ]);
+
+        return redirect()->route('todo.list');
     }
 
 }
