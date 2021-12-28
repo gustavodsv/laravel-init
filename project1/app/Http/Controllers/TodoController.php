@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Todo;
 
 class TodoController extends Controller
 {
     public function index(){
-        $list = DB::select('SELECT* FROM todo');
+        $list = Todo::all();
 
         return view('todo_CRUD.list', [
             'list' => $list
@@ -26,23 +26,21 @@ class TodoController extends Controller
             'title' => ['required', 'string']
         ]);
 
-        DB::insert('INSERT INTO todo (title, created_at) VALUES (:title, :date)', [
-            'title' => $request->input('title'),
-            'date' => NOW()
-        ]);
+        $t = new Todo;
+        $t->title = $request->input('title');
+        $t->created_at = NOW();
+        $t->save();
 
         return redirect()->route('todo.list');
     }
 
     # Edit
     public function edit($id){
-        $data = DB::select('SELECT * FROM todo WHERE id = :id', [
-            'id' => $id
-        ]);
+        $data = Todo::find($id);
 
-        if(count($data) > 0){
+        if($data){
             return view('todo_CRUD.edit',[
-                'data' => $data[0]
+                'data' => $data
             ]);
         } else {
             return redirect()->route('todo.list');
@@ -56,28 +54,31 @@ class TodoController extends Controller
             'newtitle' => ['required', 'string']
         ]);
 
-        DB::update('UPDATE todo SET title = :title, updated_at = NOW() WHERE id = :id', [
-            'id' => $id,
-            'title' => $request->input('newtitle')
-        ]);
+        Todo::find($id)->update([
+            'title'=>$request->input('newtitle'),
+            'updated_at'=>NOW()
+        ]); // add fillable on Model
 
         return redirect()->route('todo.list');
     }
 
     # Delete Action
     public function delete($id){
-        DB::delete('DELETE FROM todo WHERE id = :id', [
-            'id' => $id
-        ]);
+
+        Todo::find($id)->delete();
 
         return redirect()->route('todo.list');
     }
 
     # Modified Status Action
     public function status($id){
-        DB::update('UPDATE todo SET status = 1 - status WHERE id = :id', [
-            'id' => $id
-        ]);
+
+        $t = Todo::find($id);
+
+        if($t){
+            $t->status = 1 - $t->status;
+            $t->save();
+        }
 
         return redirect()->route('todo.list');
     }
