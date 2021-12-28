@@ -16,7 +16,9 @@
     </header>
 
     <section>
-        @yield('content')
+        <div class="container">
+            @yield('content')
+        </div>
     </section>
 
     <!-- Optional JavaScript; choose one of the two! -->

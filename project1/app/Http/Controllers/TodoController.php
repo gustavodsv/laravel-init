@@ -34,12 +34,41 @@ class TodoController extends Controller
         }
     }
 
-    public function edit(){
-        return view('todo_CRUD.edit');
+    public function edit($id){
+        $data = DB::select('SELECT * FROM todo WHERE id = :id', [
+            'id' => $id
+        ]);
+
+        if(count($data) > 0){
+            return view('todo_CRUD.edit',[
+                'data' => $data[0]
+            ]);
+        } else {
+            return redirect()->route('todo.list');
+        }
+
     }
 
-    public function editAction(){
+    public function editAction(Request $request, $id){
+        if($request->filled('newtitle')){
+            $title = $request->input('newtitle');
+            $data = DB::select('SELECT * FROM todo WHERE id = :id', [
+                'id' => $id
+            ]);
 
+            if(count($data) > 0){
+
+                DB::update('UPDATE todo SET title = :title WHERE id = :id', [
+                    'id' => $id,
+                    'title' => $title
+                ]);
+            }
+
+            return redirect()->route('todo.list');
+
+        } else {
+            return redirect()->route('todo.edit', ['id' => $id])->with('warning', 'Empty field');
+        }
     }
 
     public function delete(){
