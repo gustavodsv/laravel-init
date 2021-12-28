@@ -26,7 +26,7 @@ class TodoController extends Controller
             'title' => ['required', 'string']
         ]);
 
-        DB::insert('INSERT INTO todo (title, date) VALUES (:title, :date)', [
+        DB::insert('INSERT INTO todo (title, created_at) VALUES (:title, :date)', [
             'title' => $request->input('title'),
             'date' => NOW()
         ]);
@@ -53,10 +53,10 @@ class TodoController extends Controller
     # Edit Action
     public function editAction(Request $request, $id){
         $request->validate([
-            'title' => ['required', 'string']
+            'newtitle' => ['required', 'string']
         ]);
 
-        DB::update('UPDATE todo SET title = :title WHERE id = :id', [
+        DB::update('UPDATE todo SET title = :title, updated_at = NOW() WHERE id = :id', [
             'id' => $id,
             'title' => $request->input('newtitle')
         ]);
