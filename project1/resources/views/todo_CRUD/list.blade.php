@@ -29,7 +29,7 @@
                         {{$item->title}}
                     </a>
 
-                    <a href = '{{ route('todo.delete', ['id'=>$item->id]) }}'>
+                    <a href = '{{ route('todo.delete', ['id'=>$item->id]) }}' onclick="return confirm('Are you sure you want to delete this item')">
                         [ X ]
                     </a>
 
