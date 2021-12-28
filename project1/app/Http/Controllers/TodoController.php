@@ -27,7 +27,7 @@ class TodoController extends Controller
         ]);
 
         $t = new Todo;
-        $t->title = $request->input('title');
+        $t->title = ucfirst($request->input('title'));
         $t->created_at = NOW();
         $t->save();
 
@@ -55,7 +55,7 @@ class TodoController extends Controller
         ]);
 
         Todo::find($id)->update([
-            'title'=>$request->input('newtitle'),
+            'title'=>ucfirst($request->input('newtitle')),
             'updated_at'=>NOW()
         ]); // add fillable on Model
 
