@@ -15,25 +15,26 @@ class TodoController extends Controller
         ]);
     }
 
+    # Add
     public function add(){
         return view('todo_CRUD.add');
     }
 
+    # Add Action
     public function addAction(Request $request){
-        if($request->filled('title')) {
+        $request->validate([
+            'title' => ['required', 'string']
+        ]);
 
+        DB::insert('INSERT INTO todo (title, date) VALUES (:title, :date)', [
+            'title' => $request->input('title'),
+            'date' => NOW()
+        ]);
 
-            DB::insert('INSERT INTO todo (title, date) VALUES (:title, :date)', [
-                'title' => $request->input('title'),
-                'date' => NOW()
-            ]);
-
-            return redirect()->route('todo.list');
-        } else {
-            return redirect()->route('todo.add')->with('warning', 'Empty field');
-        }
+        return redirect()->route('todo.list');
     }
 
+    # Edit
     public function edit($id){
         $data = DB::select('SELECT * FROM todo WHERE id = :id', [
             'id' => $id
@@ -49,28 +50,21 @@ class TodoController extends Controller
 
     }
 
+    # Edit Action
     public function editAction(Request $request, $id){
-        if($request->filled('newtitle')){
-            $title = $request->input('newtitle');
-            $data = DB::select('SELECT * FROM todo WHERE id = :id', [
-                'id' => $id
-            ]);
+        $request->validate([
+            'title' => ['required', 'string']
+        ]);
 
-            if(count($data) > 0){
+        DB::update('UPDATE todo SET title = :title WHERE id = :id', [
+            'id' => $id,
+            'title' => $request->input('newtitle')
+        ]);
 
-                DB::update('UPDATE todo SET title = :title WHERE id = :id', [
-                    'id' => $id,
-                    'title' => $title
-                ]);
-            }
-
-            return redirect()->route('todo.list');
-
-        } else {
-            return redirect()->route('todo.edit', ['id' => $id])->with('warning', 'Empty field');
-        }
+        return redirect()->route('todo.list');
     }
 
+    # Delete Action
     public function delete($id){
         DB::delete('DELETE FROM todo WHERE id = :id', [
             'id' => $id
@@ -79,6 +73,7 @@ class TodoController extends Controller
         return redirect()->route('todo.list');
     }
 
+    # Modified Status Action
     public function status($id){
         DB::update('UPDATE todo SET status = 1 - status WHERE id = :id', [
             'id' => $id

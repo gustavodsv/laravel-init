@@ -2,10 +2,10 @@
 
 @section('title', 'To-do')
 
-<div class="container">
-    @section('header', 'List TO-DO')
-
 @section('content')
+<div class="container">
+
+    <h1>TO-DO</h1>
 
     <a href = '{{ route('todo.add')}}'>
         [ NEW ]
@@ -29,8 +29,8 @@
                         {{$item->title}}
                     </a>
 
-                    <a href = '{{ route('todo.delete', ['id'=>$item->id]) }}' onclick="return confirm('Are you sure you want to delete this item')">
-                        [ X ]
+                    <a href = '{{ route('todo.delete', ['id'=>$item->id]) }}' onclick="return confirm('Are you sure you want to delete this item')" class="text-danger text-decoration-none" alert="Are you sure you want to delete this item">
+                       [ x ]
                     </a>
 
                 </li>

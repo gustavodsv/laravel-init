@@ -2,14 +2,17 @@
 
 @section('title', 'To-do')
 
-<div class="container">
-    @section('header', 'New TO-DO')
-
 @section('content')
 
-    @if(session('warning'))
+<div class="container">
+
+    <h1>New task</h1>
+
+    @if($errors->any())
         <x-alert>
-            {{session('warning')}}
+            @foreach($errors->all() as $error)
+                {{$error}}<br>
+            @endforeach
         </x-alert>
     @endif
 
@@ -17,13 +20,14 @@
         @csrf
         <div class="mb-3">
             <label class="form-label">
-                Title
+                Task name
             </label>
             <input type="text" class="form-control" name="title">
         </div>
 
 
-        <input type="submit" class="btn btn-primary" value="Submit">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="btn btn-danger" onclick="window.location.href='{{route('todo.list')}}'">Cancel</div>
       </form>
 </div>
 
